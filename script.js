@@ -38,7 +38,7 @@ function addBookCover(){
     mainContainer.appendChild(pageCountContainer)
 
     count += 1
-    bookCount = "book#" + count 
+    bookCount = "book" + count 
     bookWrapper.setAttribute("id",bookCount)
     bookCover.src = book.bookCover
 
@@ -61,6 +61,7 @@ const overlay = document.querySelector("#overlay")
 const bookShelf = document.querySelector(".Book-shelf") 
 const openButton = document.querySelector(".open-button")
 const submitButton = document.querySelector(".submit-form")
+
 
 
 openButton.addEventListener("click",()=>{
@@ -98,3 +99,9 @@ function clearForms(){
     overlay.classList.remove("active")
 }
 
+const exampleBook1 = document.getElementById("book1")
+const exampleBook2 = document.getElementById("book2")
+const secondField = document.querySelector(".second-field-rightside")
+
+secondField.appendChild(exampleBook1)
+secondField.appendChild(exampleBook2)
