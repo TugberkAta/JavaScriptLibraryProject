@@ -242,4 +242,17 @@ input:invalid{
         width: 340px;
         left: 20px;
     }
+    .main-container:active .main-background, .main-container:active .author-container, .main-container:active .pagecount-container{
+        background-color: rgba(0, 0, 0, 0.473);
+        opacity: 1;
+        transition: 150ms ease-in-out;
+    }
+    .button-container{
+        display: flex;
+        justify-content: flex-end;
+        margin-right: 10px;
+    }
+    .open-button{
+        position: static;
+    }
 }
