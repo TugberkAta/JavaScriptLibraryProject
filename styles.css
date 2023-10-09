@@ -56,6 +56,10 @@ h2{
     padding: 2px;
 }
 
+.second-field-rightside>*{
+    margin-top: 2.5px;
+}
+
 
 .open-button{
     position: absolute;
