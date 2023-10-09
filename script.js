@@ -61,6 +61,10 @@ const overlay = document.querySelector("#overlay")
 const bookShelf = document.querySelector(".Book-shelf") 
 const openButton = document.querySelector(".open-button")
 const submitButton = document.querySelector(".submit-form")
+const errorMessageUrl = document.querySelector(".error-message-url")
+const errorMessageFill1 = document.querySelector(".error-message-fill-1")
+const errorMessageFill2 = document.querySelector(".error-message-fill-2")
+const errorMessageFill3 = document.querySelector(".error-message-fill-3")
 
 
 
@@ -75,8 +79,24 @@ closeButton.addEventListener("click",()=>{
 })
 
 submitButton.addEventListener("click",()=>{
-    if(Author.value === "" || bookName.value === "" || pageCount.value === "" || bookCover.value === "" || bookCover.checkValidity() === false){
+    if(Author.checkValidity() === false){
+        errorMessageFill1.style.opacity = "1"
          return 0
+    }
+    else errorMessageFill1.style.opacity = "0"
+    if( bookName.checkValidity() === false ){
+        errorMessageFill2.style.opacity = "1"
+        return 0
+    }
+    errorMessageFill2.style.opacity = "0"
+    if(pageCount.checkValidity() === false){
+        errorMessageFill3.style.opacity = "1"
+        return 0
+    }
+    errorMessageFill3.style.opacity = "0"
+    if(bookCover.checkValidity() === false){
+        errorMessageUrl.style.opacity = "1"
+        return 0
     }
     newBook = new Book(Author.value, bookName.value, pageCount.value, bookCover.value)
     addBookToLibrary(newBook)

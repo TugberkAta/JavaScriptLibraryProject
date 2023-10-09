@@ -195,7 +195,7 @@ h2{
     transform: scale(1);
 }
 
-.form-panel:first-of-type p{
+.form-header{
     font-size: 2rem;
     margin-bottom: 0.5rem;
     margin-top: 0rem;
@@ -224,6 +224,14 @@ h2{
 .form-fields-checkbox{
     margin-right: 6.6rem;
 }
+
+.error-message-fill-1, .error-message-fill-2, .error-message-fill-3, .error-message-url{
+    font-size: 0.8rem;
+    color: red;
+    margin: 0;
+    opacity: 0;
+}
+
 
 label{
     align-self: flex-start;
