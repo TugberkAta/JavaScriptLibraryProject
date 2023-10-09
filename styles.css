@@ -20,8 +20,9 @@ h1{
     font-weight: bolder;
 }
 
-h3{
+h2{
     color: white;
+    font-weight: bolder;
 }
 
 .main-page{
@@ -52,6 +53,7 @@ h3{
     background-color:#13171C;
     border-radius: 6px;
     overflow: hidden;
+    padding: 2px;
 }
 
 
