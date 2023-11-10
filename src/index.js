@@ -1,3 +1,4 @@
 import "normalize.css";
 import "./style.css";
-import "./library";
+import "./API/libraryApi";
+import createFormPanel from "./registryPanel/bookForm";

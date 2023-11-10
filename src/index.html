@@ -6,56 +6,6 @@
     <title>Library</title>
   </head>
   <body>
-    <header><h1>StorySphere</h1></header>
-
-    <div class="main-page">
-        <div class="second-field">
-            <div class="second-field-leftside">
-                <h2>Create your very own interactive library!</h2>
-            </div>
-            <div class="second-field-rightside">
-                
-            </div>
-        </div>
-        <div class="Book-shelf">
-
-        </div>
-
-        <form id="bookForm" action="styles.css" method="post">
-            <div class="form-panel">
-                <button type="button" class="close-button"><span>&times;</span></button>
-                <p class="form-header">Book Entry</p>
-                <div class="form-fields-text">
-                    <label for="Author">Authors' Name*</label>
-                    <input type="text" id="Author" name="Author" required>
-                    <p class="error-message-fill-1">Please Fill This Field</p>
-                </div>
-
-                <div class="form-fields-text">
-                    <label for="bookName">Books' Name*</label>
-                    <input type="text" id="bookName" name="bookName" required>
-                    <p class="error-message-fill-2">Please Fill This Field</p>
-                </div>
-
-                <div class="form-fields-text">
-                    <label for="pageCount">Page Count*</label>
-                    <input type="number" id="pageCount" name="pageCount" required>
-                    <p class="error-message-fill-3">Please Fill This Field</p>
-                </div>
-
-                <div class="form-fields-text">
-                    <label for="bookCover">Url of the book cover*</label>
-                    <input type="url" id="bookCover" name="bookCover" required
-                    pattern="http(s?)(:\/\/)((www.)?)(([^.]+)\.)?([a-zA-z0-9\-_]+)(.com|.net|.gov|.org|.in|.jpg)(\/[^\s]*)?">
-                    <p class="error-message-url">You need to enter a valid image address</p>
-                </div>
-                <button type="button" class="submit-form">Submit</button>
-            </div>
-        </form>
-
-        <div class="button-container"><button class="open-button" type="button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>plus</title><path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" /></svg></button></div>
-    </div>
-    <div id="overlay"></div>
     <script src="./index.js"></script>
   </body>
 </html>
