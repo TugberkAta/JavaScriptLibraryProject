@@ -1,26 +1,27 @@
 import DomContent from "../domContent";
 
-const openButtonCreate = (function openButtonCreate(){
-    const openButton = document.createElement("button")
+const openButtonCreate = (function openButtonCreate() {
+  const openButton = document.createElement("button");
 
-    openButton.classList.add("open-button")
+  openButton.classList.add("open-button");
 
-    openButton.type ="button"
+  openButton.type = "button";
 
-    DomContent.body.appendChild(openButton)
+  DomContent.body.appendChild(openButton);
 
-    openButton.innerHTML = "+"
+  openButton.innerHTML = "+";
 
-    return{openButton}
-})()
+  return { openButton };
+})();
+
 
 const createFormPanel = (function createFormPanel() {
   const bookForm = document.createElement("form");
   const formPanel = document.createElement("div");
   const closeButton = document.createElement("button");
   const formHeaderText = document.createElement("p");
-  const formHeader = document.createElement("div")
-  const formHeaderColor = document.createElement("div")
+  const formHeader = document.createElement("div");
+  const formHeaderColor = document.createElement("div");
   const formFieldText = document.createElement("div");
   const authorLabel = document.createElement("label");
   const authorInput = document.createElement("input");
@@ -33,8 +34,8 @@ const createFormPanel = (function createFormPanel() {
   bookForm.id = "book-form";
   bookForm.method = "post";
   formPanel.classList.add("form-panel");
-  formHeader.classList.add("form-header")
-  formHeaderColor.classList.add("form-header-color")
+  formHeader.classList.add("form-header");
+  formHeaderColor.classList.add("form-header-color");
   closeButton.type = "button";
   closeButton.classList.add("close-button");
   formHeaderText.classList.add("form-header-text");
@@ -55,15 +56,15 @@ const createFormPanel = (function createFormPanel() {
   closeButton.innerHTML = "&times";
   formHeaderText.innerText = "Book Entry";
   authorLabel.innerText = "Author";
-  bookNameLabel.innerText = "Book"
+  bookNameLabel.innerText = "Book";
   formErrorAuthor.innerText = "Please Fill This Field";
   formErrorBookName.innerText = "Please Fill This Field";
   submitButton.innerText = "Submit";
 
   DomContent.body.appendChild(bookForm);
   bookForm.appendChild(formPanel);
-  formPanel.appendChild(formHeader)
-  formHeader.appendChild(formHeaderColor)
+  formPanel.appendChild(formHeader);
+  formHeader.appendChild(formHeaderColor);
   formHeader.appendChild(closeButton);
   formHeader.appendChild(formHeaderText);
   formPanel.appendChild(formFieldText);
@@ -76,20 +77,25 @@ const createFormPanel = (function createFormPanel() {
   formFieldText.appendChild(formErrorBookName);
   formPanel.appendChild(submitButton);
 
-   openButtonCreate.openButton.addEventListener("click", () => {
-    formPanel.classList.add("active")
+  openButtonCreate.openButton.addEventListener("click", () => {
+    formPanel.classList.add("active");
     DomContent.overlay.classList.add("active");
-     });
-  
+  });
+
   closeButton.addEventListener("click", () => {
     formPanel.classList.remove("active");
     DomContent.overlay.classList.remove("active");
   });
 
-  return { submitButton, bookNameInput, authorInput, formPanel};
-})()
-
-
+  return {
+    submitButton,
+    bookNameInput,
+    authorInput,
+    formPanel,
+    formErrorAuthor,
+    formErrorBookName,
+  };
+})();
 
 
 export default createFormPanel;

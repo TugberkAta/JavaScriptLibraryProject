@@ -6,9 +6,40 @@ import createFormPanel from "../registryPanel/bookForm";
 let GlobalPageCount;
 let GlobalBookCoverUrl;
 
+function wrapBooks() {
+  const bookWrapper = document.createElement("div");
+  const wrapperFrame = document.createElement("div")
+
+  bookWrapper.classList.add("book-wrapper");
+  wrapperFrame.classList.add("wrapper-frame")
+
+  DomContent.mainPage.appendChild(wrapperFrame)
+  wrapperFrame.appendChild(bookWrapper)
+  return bookWrapper;
+}
+
+
 function clearForms() {
   createFormPanel.authorInput.value = "";
   createFormPanel.bookNameInput.value = "";
+}
+
+function checkValidity() {
+  createFormPanel.authorInput.required = true;
+  createFormPanel.bookNameInput.required = true;
+
+  if (createFormPanel.authorInput.checkValidity() === false) {
+    createFormPanel.formErrorAuthor.style.opacity = "1";
+  } else if (createFormPanel.authorInput.checkValidity() === true) {
+    createFormPanel.formErrorAuthor.style.opacity = "0";
+  }
+
+  if (createFormPanel.bookNameInput.checkValidity() === false) {
+    createFormPanel.formErrorBookName.style.opacity = "1";
+  }
+  else if (createFormPanel.authorInput.checkValidity() === true) {
+    createFormPanel.formErrorBookName.style.opacity = "0";
+  }
 }
 
 function filterAuthors(books) {
@@ -34,16 +65,20 @@ function filterAuthors(books) {
   return filteredArray;
 }
 
-function addBookCover(filteredArray) {
+function addBookCover(filteredArray, wrapperFrame) {
   const bookCover = document.createElement("img");
-  DomContent.mainPage.appendChild(bookCover);
+  wrapperFrame.appendChild(bookCover);  // appending to wrapperFrame instead of bookWrapper
   GlobalBookCoverUrl = `https://covers.openlibrary.org/b/id/${filteredArray[0].cover_i}-L.jpg`;
   bookCover.src = GlobalBookCoverUrl;
   console.log("Cover Added");
 }
 
-function addPageCount(filteredArray) {
+function addPageCount(filteredArray,bookWrapper) {
+  const pageCount = document.createElement("p")
+  pageCount.classList.add("pagecount-container")
+  bookWrapper.appendChild(pageCount)
   GlobalPageCount = filteredArray[0].number_of_pages_median;
+  pageCount.innerHTML = GlobalPageCount
   console.log(`Page Count Added: ${GlobalPageCount}`);
 }
 
@@ -62,21 +97,32 @@ async function getBook() {
   }
 }
 
-async function setBookData() {
+async function setBookData(bookWrapper, wrapperFrame) {
   const bookData = await getBook().catch((error) => {
     console.error("Failed to load book data:", error);
   });
   const filteredArray = filterAuthors(bookData);
-  if (filteredArray[0] === undefined){
-    return
+  if (filteredArray[0] === undefined) {
+    return;
   }
-  addPageCount(filteredArray);
-  addBookCover(filteredArray);
+  addPageCount(filteredArray,bookWrapper);
+  addBookCover(filteredArray,wrapperFrame);
   clearForms();
 }
 
 createFormPanel.submitButton.addEventListener("click", () => {
-  setBookData();
+  checkValidity();
+  if (
+    createFormPanel.authorInput.checkValidity() === false ||
+    createFormPanel.bookNameInput.checkValidity() === false
+  ) {
+    return 0;
+  }
+  createFormPanel.authorInput.required = false;
+  createFormPanel.bookNameInput.required = false;
+  const bookWrapper = wrapBooks();
+  const wrapperFrame = bookWrapper.parentElement;
+  setBookData(bookWrapper, wrapperFrame);
   DomContent.overlay.classList.remove("active");
   createFormPanel.formPanel.classList.remove("active");
 
