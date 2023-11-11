@@ -5,19 +5,28 @@ import createFormPanel from "../registryPanel/bookForm";
 
 let GlobalPageCount;
 let GlobalBookCoverUrl;
+let GlobalAuthorName;
+let GlobalBookName;
 
-function wrapBooks() {
-  const bookWrapper = document.createElement("div");
-  const wrapperFrame = document.createElement("div")
-
-  bookWrapper.classList.add("book-wrapper");
-  wrapperFrame.classList.add("wrapper-frame")
-
-  DomContent.mainPage.appendChild(wrapperFrame)
-  wrapperFrame.appendChild(bookWrapper)
-  return bookWrapper;
+function capitalizeWords(str){
+    var splitStr = str.toLowerCase().split(' ');
+    for (var i = 0; i < splitStr.length; i++) {
+        splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);     
+    }
+    return splitStr.join(' '); 
 }
 
+function wrapBooks() {
+  const mainContainer = document.createElement("div");
+  const bookWrapper = document.createElement("div");
+
+  mainContainer.classList.add("main-container");
+  bookWrapper.classList.add("book-wrapper");
+
+  DomContent.mainPage.appendChild(bookWrapper);
+  bookWrapper.appendChild(mainContainer);
+  return mainContainer;
+}
 
 function clearForms() {
   createFormPanel.authorInput.value = "";
@@ -36,51 +45,75 @@ function checkValidity() {
 
   if (createFormPanel.bookNameInput.checkValidity() === false) {
     createFormPanel.formErrorBookName.style.opacity = "1";
-  }
-  else if (createFormPanel.authorInput.checkValidity() === true) {
+  } else if (createFormPanel.authorInput.checkValidity() === true) {
     createFormPanel.formErrorBookName.style.opacity = "0";
   }
 }
 
-function filterAuthors(books) {
-  const filteredArray = [];
-
-  const maxElements = 20;
-  for (let i = 0; i < Math.min(books.docs.length, maxElements); i++) {
-    const element = books.docs[i];
-    try {
-      const filter = element.author_name.find(
-        (e) => e === createFormPanel.authorInput.value
-      );
-      if (filter !== undefined) {
-        filteredArray.push(element);
-        // console.log("Filtered array updated:", filteredArray);
-      }
-    } catch (innerError) {
-      console.error("Error processing element:", element, innerError);
-    }
-  }
-  // eslint-disable-next-line no-console
-  console.log("Final filtered work:", filteredArray);
-  return filteredArray;
-}
-
-function addBookCover(filteredArray, wrapperFrame) {
+function addBookCover(filteredArray, bookWrapper) {
   const bookCover = document.createElement("img");
-  wrapperFrame.appendChild(bookCover);  // appending to wrapperFrame instead of bookWrapper
+  bookWrapper.appendChild(bookCover);
   GlobalBookCoverUrl = `https://covers.openlibrary.org/b/id/${filteredArray[0].cover_i}-L.jpg`;
   bookCover.src = GlobalBookCoverUrl;
   console.log("Cover Added");
 }
 
-function addPageCount(filteredArray,bookWrapper) {
-  const pageCount = document.createElement("p")
-  pageCount.classList.add("pagecount-container")
-  bookWrapper.appendChild(pageCount)
+function addPageCount(filteredArray, mainContainer) {
+  const pageCount = document.createElement("p");
+  pageCount.classList.add("pagecount-container");
+  mainContainer.appendChild(pageCount);
   GlobalPageCount = filteredArray[0].number_of_pages_median;
-  pageCount.innerHTML = GlobalPageCount
+  pageCount.innerHTML = GlobalPageCount;
   console.log(`Page Count Added: ${GlobalPageCount}`);
 }
+
+function addAuthorName(filteredArray, mainContainer) {
+  const authorName = document.createElement("p");
+  authorName.classList.add("author-container");
+  mainContainer.appendChild(authorName);
+  GlobalAuthorName = filteredArray[0].author_name;
+  authorName.innerHTML = GlobalAuthorName;
+  console.log(`Author name Added ${GlobalAuthorName}`);
+}
+
+function addBookName(filteredArray, mainContainer){
+  const bookName = document.createElement("p");
+  bookName.classList.add("book-name-container")
+  mainContainer.appendChild(bookName)
+  GlobalBookName = filteredArray[0].title;
+  bookName.innerHTML = GlobalBookName
+  console.log(`Author name Added ${GlobalBookName}`);
+}
+
+function filterAuthors(books) {
+  const filteredArray = [];
+  const authorInputCapital = capitalizeWords(createFormPanel.authorInput.value);
+
+  const maxElements = Math.min(30, books.docs.length); 
+  for (let i = 0; i < maxElements; i += 1) {
+    const element = books.docs[i];
+
+    try {
+      const isAuthorMatch = element.author_name.includes(authorInputCapital);
+
+      const isAlternativeMatch = element.author_alternative_name.some(
+        (altName) => altName === authorInputCapital
+      );
+
+      const isBookCoverExist = element.cover_i
+
+      if (isAuthorMatch || isAlternativeMatch && isBookCoverExist != null) {
+        filteredArray.push(element);
+      }
+    } catch (innerError) {
+      console.error("Error processing element:", element, innerError);
+    }
+  }
+
+  console.log("Final filtered array:", filteredArray);
+  return filteredArray;
+}
+
 
 async function getBook() {
   try {
@@ -97,16 +130,21 @@ async function getBook() {
   }
 }
 
-async function setBookData(bookWrapper, wrapperFrame) {
+async function setBookData() {
   const bookData = await getBook().catch((error) => {
     console.error("Failed to load book data:", error);
   });
   const filteredArray = filterAuthors(bookData);
   if (filteredArray[0] === undefined) {
-    return;
+    clearForms();
+    return 0;
   }
-  addPageCount(filteredArray,bookWrapper);
-  addBookCover(filteredArray,wrapperFrame);
+  const mainContainer = wrapBooks();
+  const bookWrapper = mainContainer.parentElement;
+  addAuthorName(filteredArray, mainContainer);
+  addPageCount(filteredArray, mainContainer);
+  addBookName(filteredArray, mainContainer);
+  addBookCover(filteredArray, bookWrapper);
   clearForms();
 }
 
@@ -120,9 +158,7 @@ createFormPanel.submitButton.addEventListener("click", () => {
   }
   createFormPanel.authorInput.required = false;
   createFormPanel.bookNameInput.required = false;
-  const bookWrapper = wrapBooks();
-  const wrapperFrame = bookWrapper.parentElement;
-  setBookData(bookWrapper, wrapperFrame);
+  setBookData();
   DomContent.overlay.classList.remove("active");
   createFormPanel.formPanel.classList.remove("active");
 

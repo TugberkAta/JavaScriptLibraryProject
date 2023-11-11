@@ -9,7 +9,7 @@
 }
 
 * {
-  font-family: Mont;
+  font-family: Inter;
 }
 
 body {
@@ -19,6 +19,14 @@ body {
   align-items: center;
   height: 100vh;
   background-color: #13171C;
+}
+
+.main-page{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-left: 2.5rem;
+  margin-right: 2.5rem;
 }
 
 .open-button{
@@ -37,20 +45,68 @@ body {
   transform: scale(1);
 }
 
-.wrapper-frame{
-  position: relative;
-  width:150px ;
-  height: 225px;
-  overflow: hidden;
-}
-
-.wrapper-frame>img{
-  width:150px ;
-  height: 225px;
-}
-
 .book-wrapper{
+  position: relative;
+  font-weight: bold;
+}
+
+.book-wrapper>img{
+  margin: 0;
+  height: 14.438rem;
+  width: 9.75rem;
+  border-radius: 5px;
+}
+
+.author-container{
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  color: white;
   position: absolute;
+  top: 10px;
+  height: fit-content;
+  padding-right: 10px;
+  padding-left: 10px;
+  width: fit-content;
+  opacity: 0;
+  border-radius: 5px;
+}
+
+.main-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  z-index: 1;
+  height: 231px;
+  width: 156px;
+  border-radius: 5px;
+  transition: 150ms ease-in-out;
+}
+
+.book-name-container{
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  opacity: 0;
+  color: white;
+  height: fit-content;
+  width: fit-content;
+  padding-left: 10px;
+  padding-right: 10px;
+  transition: 150ms ease-in-out;
+  border-radius: 2px;
+}
+
+.main-container:hover{
+  box-shadow: inset 0px 0px 0px 3px #00E054;
+  transition: 150ms ease-in-out;
+}
+
+.main-container:hover .book-name-container, .main-container:hover .author-container, .main-container:hover .pagecount-container{
+  background-color: rgba(0, 0, 0, 0.473);
+  opacity: 1;
+  transition: 150ms ease-in-out;
 }
 
 .pagecount-container{
@@ -63,7 +119,7 @@ body {
   padding-right: 10px;
   bottom: 10px;
   color: white;
-  opacity: 1;
+  opacity: 0;
   border-radius: 5px;
 }
 
