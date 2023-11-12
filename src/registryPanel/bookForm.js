@@ -1,5 +1,10 @@
 import DomContent from "../domContent";
 
+function closeNotify(){
+  DomContent.errorMessage.classList.remove("active");
+  DomContent.errorInfo.innerHTML = ""
+}
+
 const openButtonCreate = (function openButtonCreate() {
   const openButton = document.createElement("button");
 
@@ -78,6 +83,7 @@ const createFormPanel = (function createFormPanel() {
   formPanel.appendChild(submitButton);
 
   openButtonCreate.openButton.addEventListener("click", () => {
+    closeNotify()
     formPanel.classList.add("active");
     DomContent.overlay.classList.add("active");
   });

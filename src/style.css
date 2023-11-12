@@ -17,13 +17,15 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 99.6vh;
   background-color: #13171C;
+  border-top: 0.4vh solid #EE7000;
 }
 
-.main-page{
+.library{
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 1rem;
   margin-left: 2.5rem;
   margin-right: 2.5rem;
@@ -34,15 +36,19 @@ body {
   bottom: 2rem;
   right: 3rem;   
   cursor: pointer;
-  width: 50px;
-  height: 50px;
-  border-radius: 100%;
-  background-color: #345171;
-  border: 1px mediumaquamarine solid;
+  width: 3rem;
+  height: 3rem;
+  border-radius:1000%;
+  background-color: #215054;
+  border: 2px #215054 solid;
   transition: 150ms ease-in-out;
   color: white;
   font-size: 2rem;
   transform: scale(1);
+}
+
+.open-button:hover{
+  transform: scale(1.1);
 }
 
 .book-wrapper{
@@ -98,10 +104,10 @@ body {
   border-radius: 2px;
 }
 
-.main-container:hover{
-  box-shadow: inset 0px 0px 0px 3px #00E054;
+/*.main-container:hover{
+  box-shadow: inset 0px 0px 0px 3px #EE7000;
   transition: 150ms ease-in-out;
-}
+}*/
 
 .main-container:hover .book-name-container, .main-container:hover .author-container, .main-container:hover .pagecount-container{
   background-color: rgba(0, 0, 0, 0.473);
@@ -184,14 +190,8 @@ body {
   gap: 0.3rem;
 }
 
-.form-fields-checkbox {
-  margin-right: 6.6rem;
-}
-
 .error-message-fill-1,
-.error-message-fill-2,
-.error-message-fill-3,
-.error-message-url {
+.error-message-fill-2{
   font-size: 0.8rem;
   color: red;
   margin: 0;
@@ -202,9 +202,7 @@ label {
   align-self: flex-start;
 }
 
-input[type="text"],
-input[type="number"], 
-input[type="url"] {
+input[type="text"]{
   border-radius: 5px;
   border: 1px rgb(175, 167, 167) solid;
   height: 24px;
@@ -223,12 +221,61 @@ input:invalid {
   color: white;
   border-radius: 5px;
   margin-top: 0.5rem;
-  background-color: #007EFE;
+  background-color: #27A645;
 }
 
 .submit-form:hover{
-  background-color: #0362c1;
+  background-color: #1d8d37;
   cursor: pointer ;
+}
+
+.error-pop-up{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  position: absolute;
+  height: 6rem;
+  width: 23rem;
+  border: 1px solid red;
+  z-index: 3;
+  right: 2rem;
+  top: 2rem;
+  border-radius: 6px;
+  background-color: #111111;
+  transform: scale(0);
+  transition: 200ms ease-in-out;
+}
+
+.error-pop-up>p{
+  width: 19rem;
+}
+
+.error-pop-up.active{
+  transform: scale(1);
+}
+
+.error-message-close{
+  position: absolute;
+  z-index: inherit;
+  right: 0.5rem;
+  top: 0.5rem;
+  background-color: inherit;
+  border: none;
+  color: white;
+}
+
+.error-message-icon{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: red;
+  border: solid 1px white;
+  border-radius: 100%;
+  height: 2rem;
+  width: 2rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
 .overlay {
@@ -246,4 +293,5 @@ input:invalid {
 .overlay.active {
   opacity: 1;
   pointer-events: all;
+  z-index: 1;
 }
