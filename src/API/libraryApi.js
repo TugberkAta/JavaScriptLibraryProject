@@ -3,15 +3,28 @@
 
 import DomContent from "../domContent";
 import createFormPanel from "../registryPanel/bookForm";
-import getAverageRGB from "../medianColorFinder";
+import getAverageRGB from "../medianColorPicker/medianColorFinder";
+import {wrapBooks}  from "../ManulAdd/manulBooks";
 
 let boxShadowCounter = 0;
 
+const userLibrary = JSON.parse(localStorage.getItem("Library")) || [];
 let GlobalPageCount;
-let GlobalBookCoverUrl;
 let GlobalAuthorName;
 let GlobalBookName;
+let GlobalBookCoverUrl;
 let MedianColor;
+
+function Book(AuthorName, BookName, PageCount, BookCoverUrl) {
+  this.AuthorName = AuthorName;
+  this.BookName = BookName;
+  this.PageCount = PageCount;
+  this.BookCoverUrl = BookCoverUrl;
+}
+
+function addBookToLibrary(...args) {
+  userLibrary.push(...args);
+}
 
 function notifyError(message) {
   DomContent.errorInfo.innerHTML = message;
@@ -35,6 +48,17 @@ function capitalizeWords(str) {
   for (let i = 0; i < splitStr.length; i += 1) {
     splitStr[i] =
       splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+
+    let apostropheIndex = splitStr[i].indexOf("'");
+    while (apostropheIndex !== -1) {
+      if (apostropheIndex < splitStr[i].length - 1) {
+        splitStr[i] =
+          splitStr[i].substring(0, apostropheIndex + 1) +
+          splitStr[i].charAt(apostropheIndex + 1).toUpperCase() +
+          splitStr[i].substring(apostropheIndex + 2);
+      }
+      apostropheIndex = splitStr[i].indexOf("'", apostropheIndex + 1);
+    }
   }
   return splitStr.join(" ");
 }
@@ -56,46 +80,13 @@ function applyBoxShadow(element, color) {
   element.classList.add(uniqueClassName);
 }
 
-function wrapBooks() {
-  const mainContainer = document.createElement("div");
-  const bookWrapper = document.createElement("div");
-
-  mainContainer.classList.add("main-container");
-  bookWrapper.classList.add("book-wrapper");
-
-  DomContent.library.appendChild(bookWrapper);
-  bookWrapper.appendChild(mainContainer);
-  return mainContainer;
-}
-
-function clearForms() {
-  createFormPanel.authorInput.value = "";
-  createFormPanel.bookNameInput.value = "";
-}
-
-function checkValidity() {
-  createFormPanel.authorInput.required = true;
-  createFormPanel.bookNameInput.required = true;
-
-  if (createFormPanel.authorInput.checkValidity() === false) {
-    createFormPanel.formErrorAuthor.style.opacity = "1";
-  } else if (createFormPanel.authorInput.checkValidity() === true) {
-    createFormPanel.formErrorAuthor.style.opacity = "0";
-  }
-
-  if (createFormPanel.bookNameInput.checkValidity() === false) {
-    createFormPanel.formErrorBookName.style.opacity = "1";
-  } else if (createFormPanel.authorInput.checkValidity() === true) {
-    createFormPanel.formErrorBookName.style.opacity = "0";
-  }
-}
-
 async function addBookCover(filteredArray, bookWrapper, mainContainer) {
   const bookCover = document.createElement("img");
   bookCover.crossOrigin = "anonymous";
   bookWrapper.appendChild(bookCover);
-  GlobalBookCoverUrl = `https://covers.openlibrary.org/b/id/${filteredArray[0].cover_i}-L.jpg`;
-  bookCover.src = GlobalBookCoverUrl;
+  const BookCoverUrl = `https://covers.openlibrary.org/b/id/${filteredArray[0].cover_i}-L.jpg`;
+  bookCover.src = BookCoverUrl;
+  GlobalBookCoverUrl = BookCoverUrl;
   bookCover.onload = function () {
     MedianColor = getAverageRGB(bookCover);
     applyBoxShadow(mainContainer, MedianColor);
@@ -131,6 +122,28 @@ function addBookName(filteredArray, mainContainer) {
   console.log(`Author name Added ${GlobalBookName}`);
 }
 
+function clearForms() {
+  createFormPanel.authorInput.value = "";
+  createFormPanel.bookNameInput.value = "";
+}
+
+function checkValidity() {
+  createFormPanel.authorInput.required = true;
+  createFormPanel.bookNameInput.required = true;
+
+  if (createFormPanel.authorInput.checkValidity() === false) {
+    createFormPanel.formErrorAuthor.style.opacity = "1";
+  } else if (createFormPanel.authorInput.checkValidity() === true) {
+    createFormPanel.formErrorAuthor.style.opacity = "0";
+  }
+
+  if (createFormPanel.bookNameInput.checkValidity() === false) {
+    createFormPanel.formErrorBookName.style.opacity = "1";
+  } else if (createFormPanel.authorInput.checkValidity() === true) {
+    createFormPanel.formErrorBookName.style.opacity = "0";
+  }
+}
+
 function filterData(books) {
   const filteredArray = [];
   const authorInputCapital = capitalizeWords(createFormPanel.authorInput.value);
@@ -150,7 +163,13 @@ function filterData(books) {
 
       const isBookCoverExist = element.cover_i;
 
-      if ((isAuthorMatch || isAlternativeMatch) && isBookCoverExist != null) {
+      const isPageCountExist = element.number_of_pages_median;
+
+      if (
+        (isAuthorMatch || isAlternativeMatch) &&
+        isBookCoverExist != null &&
+        isPageCountExist != null
+      ) {
         filteredArray.push(element);
       }
     } catch (innerError) {
@@ -194,6 +213,16 @@ async function setBookData() {
   addPageCount(filteredArray, mainContainer);
   addBookName(filteredArray, mainContainer);
   addBookCover(filteredArray, bookWrapper, mainContainer);
+
+  const newBook = new Book(
+    GlobalAuthorName,
+    GlobalBookName,
+    GlobalPageCount,
+    GlobalBookCoverUrl
+  );
+
+  addBookToLibrary(newBook);
+  localStorage.setItem("Library", JSON.stringify(userLibrary));
   clearForms();
 }
 
@@ -215,4 +244,4 @@ createFormPanel.submitButton.addEventListener("click", () => {
   console.log("Loading...");
 });
 
-// export{GlobalPageCount,GlobalBookCoverUrl}
+export default userLibrary;

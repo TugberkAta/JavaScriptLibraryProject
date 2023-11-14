@@ -54,6 +54,12 @@ body {
 .book-wrapper{
   position: relative;
   font-weight: bold;
+  transition: 150ms ease-in-out;
+}
+
+.book-wrapper:hover{
+  transform: scale(1.05);
+  z-index: 3;
 }
 
 .book-wrapper>img{

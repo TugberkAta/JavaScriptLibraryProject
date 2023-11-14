@@ -1,5 +1,3 @@
-
-
 export default function getAverageRGB(imgEl) {
   const blockSize = 5; // only visit every 5 pixels
   const defaultRGB = { r: 0, g: 0, b: 0 }; // for non-supporting environments
@@ -44,5 +42,3 @@ export default function getAverageRGB(imgEl) {
 
   return rgb;
 }
-
-
