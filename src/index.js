@@ -1,5 +1,5 @@
 import "normalize.css";
 import "./style.css";
-import "./ManulAdd/manulBooks"
+import "./ManualAdd/manualBooks"
 import "./API/libraryApi";
 import "./registryPanel/bookForm";

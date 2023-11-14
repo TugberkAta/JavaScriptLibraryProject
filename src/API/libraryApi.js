@@ -4,7 +4,7 @@
 import DomContent from "../domContent";
 import { createFormPanel, loadingStateStart, loadingStateOver } from "../registryPanel/bookForm";
 import getAverageRGB from "../medianColorPicker/medianColorFinder";
-import {wrapBooks}  from "../ManulAdd/manulBooks";
+import wrapBooks from "../ManualAdd/manualBooks";
 
 let boxShadowCounter = 0;
 

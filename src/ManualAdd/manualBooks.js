@@ -4,7 +4,7 @@ import getAverageRGB from "../medianColorPicker/medianColorFinder";
 const userLibrary = JSON.parse(localStorage.getItem("Library")) || [];
 let boxShadowCounter = 0;
 
-export function wrapBooks() {
+export default function wrapBooks() {
   const mainContainer = document.createElement("div");
   const bookWrapper = document.createElement("div");
 
