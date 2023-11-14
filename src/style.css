@@ -38,17 +38,59 @@ body {
   cursor: pointer;
   width: 3rem;
   height: 3rem;
-  border-radius:1000%;
+  border-radius:100%;
   background-color: #215054;
   border: 2px #215054 solid;
   transition: 150ms ease-in-out;
-  color: white;
   font-size: 2rem;
   transform: scale(1);
 }
 
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.open-button.loading-state{
+  pointer-events: none;
+  cursor: pointer;
+  display: inline-block;
+  color: white;
+}
+
 .open-button:hover{
   transform: scale(1.1);
+}
+
+.open-button-icon{
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.22rem ;
+  margin-bottom: 0.35rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: white;
+  transform: scale(1);
+  transition: 300ms ease-in-out;
+}
+
+.loading-state{
+  border: 0.2rem solid white;
+  border-radius: 50%;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  animation: rotation 1s infinite linear;
+}
+
+.loading-state .open-button-icon{
+  transform: scale(0);
 }
 
 .book-wrapper{

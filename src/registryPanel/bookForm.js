@@ -7,20 +7,23 @@ function closeNotify(){
 
 const openButtonCreate = (function openButtonCreate() {
   const openButton = document.createElement("button");
+  const openButtonIcon = document.createElement("p")
 
-  openButton.classList.add("open-button");
+  openButton.classList.add("open-button", "normal-state");
+  openButtonIcon.classList.add("open-button-icon")
 
   openButton.type = "button";
 
   DomContent.body.appendChild(openButton);
+  openButton.appendChild(openButtonIcon)
 
-  openButton.innerHTML = "+";
+  openButtonIcon.innerHTML = "+"
 
-  return { openButton };
+  return { openButton,openButtonIcon };
 })();
 
 
-const createFormPanel = (function createFormPanel() {
+export const createFormPanel = (function createFormPanel() {
   const bookForm = document.createElement("form");
   const formPanel = document.createElement("div");
   const closeButton = document.createElement("button");
@@ -103,5 +106,13 @@ const createFormPanel = (function createFormPanel() {
   };
 })();
 
+export function loadingStateStart(){
+  openButtonCreate.openButton.classList.add("loading-state")
+  openButtonCreate.openButton.classList.remove("normal-state")
+}
 
-export default createFormPanel;
+export function loadingStateOver(){
+  openButtonCreate.openButton.classList.remove("loading-state")
+  openButtonCreate.openButton.classList.add("normal-state")
+}
+

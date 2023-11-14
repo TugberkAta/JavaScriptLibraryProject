@@ -2,7 +2,7 @@
 /* eslint-disable no-console */
 
 import DomContent from "../domContent";
-import createFormPanel from "../registryPanel/bookForm";
+import { createFormPanel, loadingStateStart, loadingStateOver } from "../registryPanel/bookForm";
 import getAverageRGB from "../medianColorPicker/medianColorFinder";
 import {wrapBooks}  from "../ManulAdd/manulBooks";
 
@@ -174,6 +174,7 @@ function filterData(books) {
       }
     } catch (innerError) {
       console.error("Error processing element:", element, innerError);
+      loadingStateOver()
     }
   }
 
@@ -193,18 +194,22 @@ async function getBook() {
     return books;
   } catch (error) {
     console.error("Error caught:", error);
+    loadingStateOver()
   }
 }
 
 async function setBookData() {
+  loadingStateStart()
   const bookData = await getBook().catch((error) => {
     console.error("Failed to load book data:", error);
     notifyError("Failed to load book data");
+    loadingStateOver()
   });
   const filteredArray = filterData(bookData);
   if (filteredArray[0] === undefined) {
     clearForms();
     notifyError("No matches found. Please refine your search and try again.");
+    loadingStateOver()
     return 0;
   }
   const mainContainer = wrapBooks();
@@ -224,6 +229,7 @@ async function setBookData() {
   addBookToLibrary(newBook);
   localStorage.setItem("Library", JSON.stringify(userLibrary));
   clearForms();
+  loadingStateOver()
 }
 
 createFormPanel.submitButton.addEventListener("click", () => {
@@ -240,8 +246,6 @@ createFormPanel.submitButton.addEventListener("click", () => {
   setBookData();
   DomContent.overlay.classList.remove("active");
   createFormPanel.formPanel.classList.remove("active");
-
-  console.log("Loading...");
 });
 
 export default userLibrary;
