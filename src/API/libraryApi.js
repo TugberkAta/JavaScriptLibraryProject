@@ -110,7 +110,7 @@ function addAuthorName(filteredArray, mainContainer) {
   mainContainer.appendChild(authorName);
   GlobalAuthorName = filteredArray[0].author_name;
   authorName.innerHTML = GlobalAuthorName;
-  console.log(`Author name Added ${GlobalAuthorName}`);
+  console.log(`Author Name Added ${GlobalAuthorName}`);
 }
 
 function addBookName(filteredArray, mainContainer) {
@@ -119,7 +119,7 @@ function addBookName(filteredArray, mainContainer) {
   mainContainer.appendChild(bookName);
   GlobalBookName = filteredArray[0].title;
   bookName.innerHTML = GlobalBookName;
-  console.log(`Author name Added ${GlobalBookName}`);
+  console.log(`Book Name Added ${GlobalBookName}`);
 }
 
 function clearForms() {
@@ -190,6 +190,7 @@ async function getBook() {
     );
     console.log("Fetch call successful");
     const books = await response.json();
+    console.log(books)
     console.log("Books parsed");
     return books;
   } catch (error) {
