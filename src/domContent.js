@@ -7,6 +7,7 @@ const DomContent = (function DomContent() {
   const errorMessageClose = document.createElement("button");
   const errorMessageIcon = document.createElement("div");
   const errorInfo = document.createElement("p");
+  const loadingObject = document.createElement("div")
 
   mainPage.classList.add("main-page");
   overlay.classList.add("overlay");
@@ -14,6 +15,7 @@ const DomContent = (function DomContent() {
   errorMessage.classList.add("error-pop-up");
   errorMessageClose.classList.add("error-message-close");
   errorMessageIcon.classList.add("error-message-icon");
+  loadingObject.classList.add("loading-object")
 
   errorMessageClose.innerHTML = "&times";
   errorMessageIcon.innerHTML = "!";
@@ -33,6 +35,7 @@ const DomContent = (function DomContent() {
     errorMessage,
     errorMessageClose,
     errorInfo,
+    loadingObject
   };
 })();
 

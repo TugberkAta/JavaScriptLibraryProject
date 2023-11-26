@@ -1,18 +1,24 @@
 import DomContent from "../domContent";
 import getAverageRGB from "../medianColorPicker/medianColorFinder";
 
-const userLibrary = JSON.parse(localStorage.getItem("Library")) || [];
+let userLibrary = JSON.parse(localStorage.getItem("Library")) || [];
 let boxShadowCounter = 0;
 
-export default function wrapBooks() {
+export function wrapBooks() {
   const mainContainer = document.createElement("div");
   const bookWrapper = document.createElement("div");
+  const removeButton = document.createElement("div");
 
   mainContainer.classList.add("main-container");
   bookWrapper.classList.add("book-wrapper");
 
+  removeButton.classList.add("remove-button");
+
+  removeButton.innerHTML = "&times";
+
   DomContent.library.appendChild(bookWrapper);
   bookWrapper.appendChild(mainContainer);
+  mainContainer.appendChild(removeButton);
   return mainContainer;
 }
 
@@ -35,6 +41,10 @@ function addPageCount(pageCount, mainContainer) {
   pageCountElement.classList.add("pagecount-container");
   mainContainer.appendChild(pageCountElement);
   pageCountElement.innerHTML = pageCount;
+}
+
+function addBookId(idNum, bookWrapper) {
+  bookWrapper.id = idNum;
 }
 
 function applyBoxShadow(element, color) {
@@ -68,14 +78,41 @@ function manualAdding() {
       applyBoxShadow(mainContainer, medianColor);
     };
 
-    // Add book details
     addAuthorName(book.AuthorName, mainContainer);
     addBookName(book.BookName, mainContainer);
     addPageCount(book.PageCount, mainContainer);
+    addBookId(book.BookID, bookWrapper);
+  });
+}
+
+function removeData(elementToRemove) {
+  console.log("removing data")
+  const tempUserLibrary = [];
+  userLibrary.forEach((e) => {
+    if (Number(elementToRemove.getAttribute("id")) !== e.BookID) {
+      tempUserLibrary.push(e);
+    }
+  });
+  userLibrary = tempUserLibrary;
+  console.log(userLibrary);
+  localStorage.setItem("Library", JSON.stringify(userLibrary));
+}
+
+export function removeBook() {
+  const removeButtons = document.querySelectorAll(".remove-button");
+
+  removeButtons.forEach((removeButton) => {
+    removeButton.addEventListener("click", (e) => {
+      const button = e.target;
+      const elementToRemove = button.parentNode.parentNode;
+      elementToRemove.parentNode.removeChild(elementToRemove);
+      removeData(elementToRemove);
+    });
   });
 }
 
 window.onload = function () {
   manualAdding();
   console.log(userLibrary);
+  removeBook();
 };

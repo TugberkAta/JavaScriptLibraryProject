@@ -2,9 +2,13 @@
 /* eslint-disable no-console */
 
 import DomContent from "../domContent";
-import { createFormPanel, loadingStateStart, loadingStateOver } from "../registryPanel/bookForm";
+import {
+  createFormPanel,
+  loadingStateStart,
+  loadingStateOver,
+} from "../registryPanel/bookForm";
 import getAverageRGB from "../medianColorPicker/medianColorFinder";
-import wrapBooks from "../ManualAdd/manualBooks";
+import { removeBook, wrapBooks } from "../ManualAdd/manualBooks";
 
 let boxShadowCounter = 0;
 
@@ -14,12 +18,14 @@ let GlobalAuthorName;
 let GlobalBookName;
 let GlobalBookCoverUrl;
 let MedianColor;
+let BookId;
 
-function Book(AuthorName, BookName, PageCount, BookCoverUrl) {
+function Book(AuthorName, BookName, PageCount, BookCoverUrl, BookId) {
   this.AuthorName = AuthorName;
   this.BookName = BookName;
   this.PageCount = PageCount;
   this.BookCoverUrl = BookCoverUrl;
+  this.BookID = BookId;
 }
 
 function addBookToLibrary(...args) {
@@ -80,7 +86,7 @@ function applyBoxShadow(element, color) {
   element.classList.add(uniqueClassName);
 }
 
-async function addBookCover(filteredArray, bookWrapper, mainContainer) {
+function addBookCover(filteredArray, bookWrapper, mainContainer) {
   const bookCover = document.createElement("img");
   bookCover.crossOrigin = "anonymous";
   bookWrapper.appendChild(bookCover);
@@ -93,6 +99,11 @@ async function addBookCover(filteredArray, bookWrapper, mainContainer) {
   };
 
   console.log("Cover Added");
+}
+
+function addBookId(bookWrapper) {
+  BookId = Math.floor(Math.random() * 1000);
+  bookWrapper.id = BookId;
 }
 
 function addPageCount(filteredArray, mainContainer) {
@@ -174,7 +185,7 @@ function filterData(books) {
       }
     } catch (innerError) {
       console.error("Error processing element:", element, innerError);
-      loadingStateOver()
+      loadingStateOver();
     }
   }
 
@@ -190,27 +201,27 @@ async function getBook() {
     );
     console.log("Fetch call successful");
     const books = await response.json();
-    console.log(books)
+    console.log(books);
     console.log("Books parsed");
     return books;
   } catch (error) {
     console.error("Error caught:", error);
-    loadingStateOver()
+    loadingStateOver();
   }
 }
 
 async function setBookData() {
-  loadingStateStart()
+  loadingStateStart();
   const bookData = await getBook().catch((error) => {
     console.error("Failed to load book data:", error);
     notifyError("Failed to load book data");
-    loadingStateOver()
+    loadingStateOver();
   });
   const filteredArray = filterData(bookData);
   if (filteredArray[0] === undefined) {
     clearForms();
     notifyError("No matches found. Please refine your search and try again.");
-    loadingStateOver()
+    loadingStateOver();
     return 0;
   }
   const mainContainer = wrapBooks();
@@ -219,19 +230,22 @@ async function setBookData() {
   addPageCount(filteredArray, mainContainer);
   addBookName(filteredArray, mainContainer);
   addBookCover(filteredArray, bookWrapper, mainContainer);
+  addBookId(bookWrapper);
 
   const newBook = new Book(
     GlobalAuthorName,
     GlobalBookName,
     GlobalPageCount,
-    GlobalBookCoverUrl
+    GlobalBookCoverUrl,
+    BookId
   );
-
   addBookToLibrary(newBook);
   localStorage.setItem("Library", JSON.stringify(userLibrary));
+  console.log(userLibrary)
   clearForms();
-  loadingStateOver()
+  loadingStateOver();
 }
+
 
 createFormPanel.submitButton.addEventListener("click", () => {
   closeNotify();
@@ -244,7 +258,7 @@ createFormPanel.submitButton.addEventListener("click", () => {
   }
   createFormPanel.authorInput.required = false;
   createFormPanel.bookNameInput.required = false;
-  setBookData();
+  setBookData()
   DomContent.overlay.classList.remove("active");
   createFormPanel.formPanel.classList.remove("active");
 });

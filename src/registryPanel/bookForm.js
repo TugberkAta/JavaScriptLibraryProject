@@ -1,27 +1,27 @@
 import DomContent from "../domContent";
 
-function closeNotify(){
+function closeNotify() {
   DomContent.errorMessage.classList.remove("active");
-  DomContent.errorInfo.innerHTML = ""
+  DomContent.errorInfo.innerHTML = "";
 }
 
 const openButtonCreate = (function openButtonCreate() {
   const openButton = document.createElement("button");
-  const openButtonIcon = document.createElement("p")
+  const openButtonIcon = document.createElement("p");
 
   openButton.classList.add("open-button", "normal-state");
-  openButtonIcon.classList.add("open-button-icon")
+  openButtonIcon.classList.add("open-button-icon");
 
   openButton.type = "button";
 
   DomContent.body.appendChild(openButton);
-  openButton.appendChild(openButtonIcon)
+  openButton.appendChild(openButtonIcon);
+  openButton.appendChild(DomContent.loadingObject)
 
-  openButtonIcon.innerHTML = "+"
+  openButtonIcon.innerHTML = "+";
 
-  return { openButton,openButtonIcon };
+  return { openButton, openButtonIcon };
 })();
-
 
 export const createFormPanel = (function createFormPanel() {
   const bookForm = document.createElement("form");
@@ -86,7 +86,7 @@ export const createFormPanel = (function createFormPanel() {
   formPanel.appendChild(submitButton);
 
   openButtonCreate.openButton.addEventListener("click", () => {
-    closeNotify()
+    closeNotify();
     formPanel.classList.add("active");
     DomContent.overlay.classList.add("active");
   });
@@ -106,13 +106,14 @@ export const createFormPanel = (function createFormPanel() {
   };
 })();
 
-export function loadingStateStart(){
-  openButtonCreate.openButton.classList.add("loading-state")
-  openButtonCreate.openButton.classList.remove("normal-state")
+export function loadingStateStart() {
+  openButtonCreate.openButtonIcon.innerHTML = ""
+  openButtonCreate.openButton.classList.add("loading-state");
+  openButtonCreate.openButton.classList.remove("normal-state");
 }
 
-export function loadingStateOver(){
-  openButtonCreate.openButton.classList.remove("loading-state")
-  openButtonCreate.openButton.classList.add("normal-state")
+export function loadingStateOver() {
+  openButtonCreate.openButtonIcon.innerHTML = "+"
+  openButtonCreate.openButton.classList.remove("loading-state");
+  openButtonCreate.openButton.classList.add("normal-state");
 }
-

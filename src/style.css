@@ -8,6 +8,15 @@
   src: url("fonts/Inter-VariableFont_slnt\,wght.ttf");
 }
 
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 * {
   font-family: Inter;
 }
@@ -17,13 +26,13 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 99.6vh;
+  min-height: 99.6vh;
   background-color: #13171C;
   border-top: 0.4vh solid #EE7000;
 }
 
 .main-page{
-  height: 100%;
+  min-height: 100%;
   margin-top: 5rem;
 }
 
@@ -37,42 +46,35 @@ body {
 }
 
 .open-button{
+  display: flex;
   position: fixed;
   bottom: 2rem;
   right: 3rem;   
   cursor: pointer;
-  width: 3rem;
-  height: 3rem;
+  min-width: 3rem;
+  min-height: 3rem;
   border-radius:100%;
   background-color: #215054;
   border: 2px #215054 solid;
   transition: 150ms ease-in-out;
   font-size: 2rem;
   transform: scale(1);
-}
-
-@keyframes rotation {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
 }
 
 .open-button.loading-state{
   pointer-events: none;
   cursor: pointer;
   display: inline-block;
-  color: white;
-}
+} 
 
 .open-button:hover{
   transform: scale(1.1);
 }
 
 .open-button-icon{
-  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -80,19 +82,23 @@ body {
   margin-bottom: 0px;
   color: white;
   transform: scale(1);
-  transition: 300ms ease-in-out;
 }
 
-.loading-state{
+.open-button.loading-state > .loading-object{
+  position: relative  ;
+  margin: 0px;
   border: 0.2rem solid white;
-  border-radius: 50%;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
+  max-width: 2.3rem;
+  min-height: 2.3rem;
+  top: 0px;
   border-right-color: transparent;
-  animation: rotation 1s infinite linear;
+  border-left-color: transparent;
+  right: 0px;
+  border-radius: 50%;
+  animation: rotation 1s infinite ease-in-out;
 }
 
-.loading-state .open-button-icon{
+.open-button.loading-state> .open-button-icon{
   transform: scale(0);
 }
 
@@ -114,19 +120,12 @@ body {
   border-radius: 5px;
 }
 
-.author-container{
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  color: white;
+.remove-button{
   position: absolute;
-  top: 10px;
-  height: fit-content;
-  padding-right: 10px;
-  padding-left: 10px;
-  width: fit-content;
+  right: 0.4rem;
+  top: 0.4rem;
   opacity: 0;
-  border-radius: 5px;
+  cursor: pointer;
 }
 
 .main-container{
@@ -135,24 +134,33 @@ body {
   justify-content: center;
   position: absolute;
   z-index: 1;
-  height: 231px;
-  width: 156px;
+  min-height: 231px;
+  min-width: 156px;
   border-radius: 5px;
   transition: 150ms ease-in-out;
 }
 
-.book-name-container{
+.author-container{
+  position: absolute;
+  top: 10px;
+}
+
+.pagecount-container{
+  position: absolute;
+  bottom: 10px;
+}
+
+.book-name-container, .pagecount-container, .author-container{
+  padding: 0.13rem 0.8rem 0.13rem 0.8rem;
+  border-radius: 5px;
   display: flex;
   text-align: center;
   justify-content: center;
   opacity: 0;
   color: white;
-  height: fit-content;
-  width: fit-content;
-  padding-left: 10px;
-  padding-right: 10px;
+  min-height: fit-content;
+  max-width: fit-content;
   transition: 150ms ease-in-out;
-  border-radius: 2px;
 }
 
 /*.main-container:hover{
@@ -166,18 +174,9 @@ body {
   transition: 150ms ease-in-out;
 }
 
-.pagecount-container{
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  width: fit-content;
-  padding-left: 10px;
-  padding-right: 10px;
-  bottom: 10px;
-  color: white;
-  opacity: 0;
-  border-radius: 5px;
+.main-container:hover .remove-button{
+  opacity: 1;
+  transition: 150ms ease-in-out;
 }
 
 .form-panel {
@@ -193,7 +192,7 @@ body {
   margin-left: auto; 
   margin-right: auto; 
   transition: 200ms ease-in-out;
-  height: 26rem;
+  min-height: 26rem;
   border-radius: 4px;
   gap: 1.5rem;
   transform: scale(0);
@@ -216,7 +215,7 @@ body {
 }
 
 .form-header-color {
-  height: 5px;
+  min-height: 5px;
   background-color: #9978ee;
 }
 
@@ -230,12 +229,14 @@ body {
 
 .close-button {
   width: min-content;
-  height: min-content;
+  min-height: min-content;
   background-color: inherit;
   border-style: none;
   font-size: 2rem;
   align-self: flex-end;
   margin-right: 1rem;
+  padding: 0;
+  color: black;
 }
 
 .form-fields-text {
@@ -260,9 +261,9 @@ label {
 input[type="text"]{
   border-radius: 5px;
   border: 1px rgb(175, 167, 167) solid;
-  height: 24px;
+  min-height: 24px;
   box-shadow: inset 0 2px 4px 0 hsla(0, 0%, 0%, 0.08);
-  width: 13rem;
+  max-width: 13rem;
 }
 
 input:invalid {
@@ -270,8 +271,8 @@ input:invalid {
 }
 
 .submit-form {
-  width: 6rem;
-  height: 2rem;
+  max-width: 6rem;
+  min-height: 2rem;
   border: none;
   color: white;
   border-radius: 5px;
@@ -290,8 +291,8 @@ input:invalid {
   align-items: center;
   color: white;
   position: absolute;
-  height: 6rem;
-  width: 23rem;
+  min-height: 6rem;
+  max-width: 23rem;
   border: 1px solid red;
   z-index: 3;
   right: 2rem;
@@ -303,7 +304,7 @@ input:invalid {
 }
 
 .error-pop-up>p{
-  width: 19rem;
+  max-width: 19rem;
 }
 
 .error-pop-up.active{
@@ -327,10 +328,11 @@ input:invalid {
   color: red;
   border: solid 1px white;
   border-radius: 100%;
-  height: 2rem;
-  width: 2rem;
+  min-height: 2rem;
+  min-width: 2rem;
   margin-left: 1rem;
   margin-right: 1rem;
+  animation: ;
 }
 
 .overlay {
@@ -356,11 +358,11 @@ input:invalid {
 
   .form-panel {
     top: 15%;;
-    height: 23rem;
+    min-height: 23rem;
   }
   
   .form-header, .form-panel, .form-header-color{
-    width: 16rem;
+    max-width: 16rem;
   }
 
   .form-header-text {
